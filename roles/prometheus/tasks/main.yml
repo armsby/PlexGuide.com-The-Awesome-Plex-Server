@@ -104,9 +104,13 @@
                   {{ vars['node-exporter']['version'] }}
            user: root
            volumes:
+             - /proc:/host/proc:ro
+             - /sys:/host/sys:ro
              - /:/rootfs:ro
            privileged: true
            command:
+             - --path.procfs=/host/proc
+             - --path.sysfs=/host/sys
              - --collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)
            restart: unless-stopped
            networks:
