@@ -82,7 +82,8 @@
        version: '2'
        services:
          prometheus:
-           image: prom/prometheus:v2.3.2
+           image: {{ vars['prometheus']['image'] }}:\
+                  {{ vars['prometheus']['version'] }}
            command:
              - --config.file=/etc/prometheus/prometheus.yml
              - --storage.tsdb.path=/prometheus
@@ -99,7 +100,8 @@
              org.label-schema.group: "monitoring" 
            user: 1000:1000
          nodeexporter:
-           image: prom/node-exporter:v0.16.0
+           image: {{ vars['node-exporter']['image'] }}:\
+                  {{ vars['node-exporter']['version'] }}
            user: root
            volumes:
              - /:/rootfs:ro
@@ -112,7 +114,8 @@
            labels:
              org.label-schema.group: "monitoring"
          cadvisor:
-           image: google/cadvisor:v0.30.2
+           image: {{ vars['cadvisor']['image'] }}:\
+                  {{ vars['cadvisor']['version'] }}
            volumes:
              - /:/rootfs:ro
              - /var/run:/var/run:ro
@@ -125,7 +128,8 @@
            labels:
              org.label-schema.group: "monitoring"
          grafana:
-           image: grafana/grafana:5.2.3
+           image: {{ vars['grafana']['image'] }}:\
+                  {{ vars['grafana']['version'] }}
            depends_on:
              - prometheus
            volumes:
@@ -138,8 +142,6 @@
            restart: unless-stopped
            networks:
              - net
-#           ports:
-#             - 3000:3000
            labels:
              org.label-schema.group: "monitoring"
              traefik.enable: "true"
